@@ -1,0 +1,295 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>TEST SONG</title>
+  <link rel="stylesheet" href="../style.css" />
+  <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
+</head>
+<body>
+  <img id="background-gif" src="https://media4.giphy.com/media/4EiGNSTfy4WC4/giphy.gif" alt="Background animation">
+
+  <div id="loading-menu">
+    <div id="loading-title">Música teste</div>
+    <div id="loading-bar"><div id="loading-progress"></div></div>
+    <div id="loading-status">Preparando o jogo...</div>
+    <button id="start-button">Começar</button>
+  </div>
+
+  <div class="game-container">
+    <div class="lane" id="lane-up"><div class="judge-line"></div><div class="receptor">↑</div></div>
+    <div class="lane" id="lane-left"><div class="judge-line"></div><div class="receptor">←</div></div>
+    <div class="lane" id="lane-right"><div class="judge-line"></div><div class="receptor">→</div></div>
+    <div class="lane" id="lane-down"><div class="judge-line"></div><div class="receptor">↓</div></div>
+  </div>
+
+  <div id="hud">
+    <div id="score">Pontuação: 0</div>
+    <div id="combo">Combo: 0</div>
+  </div>
+
+  <script id="chart-data" type="application/json">
+  {
+  "song": "rat.mp3",
+  "bpm": 120,
+  "notes": [
+    {
+      "time": 2.239491,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 2.422825,
+      "direction": "up",
+      "bpm": 120
+    },
+    
+    {
+      "time": 3.120281,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 3.413347,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 3.633694,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 3.932413,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 4.175215,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 4.488677,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 5.329311,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 5.637855,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 5.875026,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 6.175774,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 6.467189,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 6.753781,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 7.543423,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 7.84153,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 8.114326,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 8.387423,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 8.693117,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 8.972976,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 9.821401,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 10.100953,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 10.41153,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 10.683091,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 10.991906,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 11.286046,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 11.517025,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 12.174348,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 12.43392,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 12.700603,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 12.957655,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 13.185501,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 13.487307,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 14.39071,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 14.591681,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 14.889956,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 15.113695,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 15.461369,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 15.732313,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 16.63125,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 16.857854,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 17.133887,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 17.401208,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 17.690279,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 17.970214,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 18.795648,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 19.05053,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 19.338017,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 19.656159,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 19.941158,
+      "direction": "left",
+      "bpm": 120
+    }
+  ]
+}
+  </script>
+
+  <script src="../game.js"></script>
+</body>
+</html>

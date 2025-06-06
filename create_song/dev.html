@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Editor de Chart FNF com Teclado</title>
+   <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    #editor { margin-bottom: 20px; }
+    #notes-list { max-height: 300px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; }
+    .note-item { margin: 5px 0; padding: 5px; background: #f5f5f5; }
+    .controls button { font-size: 20px; padding: 10px 20px; margin: 5px; }
+    .key-active { 
+      transform: scale(0.9);
+      box-shadow: 0 0 10px yellow;
+    }
+    .note-hold { background: #ffeb3b; }
+    .config-section { margin: 15px 0; padding: 10px; border: 1px solid #ddd; background: #f9f9f9; }
+  </style>
+</head>
+<body>
+  <h1>Editor de Chart com Teclado</h1>
+  <div id="editor">
+    <audio id="preview" controls src="Porão.mp3"></audio>
+    
+    <div class="config-section">
+      <div>
+        <label>BPM: <input type="number" id="bpm" value="120"></label>
+      </div>
+      <div>
+        <label>
+          <input type="checkbox" id="hold-mode"> Modo Nota Longa (segure a tecla)
+        </label>
+      </div>
+      <div>
+        <label>
+          Limite para nota longa: <input type="number" id="hold-threshold" value="0.1" step="0.01" min="0.01"> segundos
+        </label>
+      </div>
+    </div>
+    
+    <div class="controls">
+      <button data-direction="left" id="left-btn">← (Left - A/←)</button>
+      <button data-direction="down" id="down-btn">↓ (Down - S/↓)</button>
+      <button data-direction="up" id="up-btn">↑ (Up - W/↑)</button>
+      <button data-direction="right" id="right-btn">→ (Right - D/→)</button>
+    </div>
+    <div>
+      <button id="save">Salvar Chart</button>
+      <button id="clear">Limpar Tudo</button>
+    </div>
+    <h3>Notas Adicionadas:</h3>
+    <div id="notes-list"></div>
+  </div>
+
+  <script>
+    const notes = [];
+    const audio = document.getElementById('preview');
+    const notesList = document.getElementById('notes-list');
+    const bpmInput = document.getElementById('bpm');
+    const holdModeCheckbox = document.getElementById('hold-mode');
+    const holdThresholdInput = document.getElementById('hold-threshold');
+
+    // Variáveis para controle de notas longas
+    const activeHolds = {
+      left: null,
+      down: null,
+      up: null,
+      right: null
+    };
+
+    // Mapeamento de teclas para direções
+    const keyMap = {
+      'ArrowLeft': 'left',
+      'ArrowDown': 'down',
+      'ArrowUp': 'up',
+      'ArrowRight': 'right',
+      'a': 'left',
+      's': 'down',
+      'w': 'up',
+      'd': 'right'
+    };
+
+    // Botões na tela
+    const directionButtons = {
+      'left': document.getElementById('left-btn'),
+      'down': document.getElementById('down-btn'),
+      'up': document.getElementById('up-btn'),
+      'right': document.getElementById('right-btn')
+    };
+
+    // Atualizar lista de notas
+    function updateNotesList() {
+      notesList.innerHTML = '';
+      notes.sort((a, b) => a.time - b.time).forEach((note, index) => {
+        const noteElement = document.createElement('div');
+        noteElement.className = `note-item ${note.duration ? 'note-hold' : ''}`;
+        
+        let noteInfo = `${index + 1}. Tempo: ${note.time.toFixed(2)}s - ${note.direction}`;
+        if (note.duration) {
+          noteInfo += ` (Duração: ${note.duration.toFixed(2)}s)`;
+        }
+        
+        noteElement.innerHTML = `
+          ${noteInfo}
+          <button onclick="deleteNote(${index})">X</button>
+        `;
+        notesList.appendChild(noteElement);
+      });
+    }
+
+    // Função global para deletar notas
+    window.deleteNote = function(index) {
+      notes.splice(index, 1);
+      updateNotesList();
+    };
+
+    // Adicionar nota (curta ou início de nota longa)
+    function addNote(direction) {
+      if (holdModeCheckbox.checked) {
+        // Se já existe uma nota longa ativa nesta direção, ignorar
+        if (activeHolds[direction]) return;
+        
+        const newNote = {
+          time: audio.currentTime,
+          direction: direction,
+          bpm: parseInt(bpmInput.value),
+          duration: 0 // Será atualizado quando a tecla for solta
+        };
+        
+        notes.push(newNote);
+        activeHolds[direction] = newNote;
+        updateNotesList();
+        console.log('Início de nota longa:', newNote);
+      } else {
+        // Nota curta
+        const newNote = {
+          time: audio.currentTime,
+          direction: direction,
+          bpm: parseInt(bpmInput.value)
+        };
+        notes.push(newNote);
+        updateNotesList();
+        console.log('Nota curta adicionada:', newNote);
+      }
+      
+      // Efeito visual no botão
+      const btn = directionButtons[direction];
+      btn.classList.add('key-active');
+      setTimeout(() => btn.classList.remove('key-active'), 100);
+    }
+
+    // Finalizar nota longa
+    function endHoldNote(direction) {
+      if (!holdModeCheckbox.checked) return;
+      
+      const note = activeHolds[direction];
+      if (note) {
+        const duration = audio.currentTime - note.time;
+        const threshold = parseFloat(holdThresholdInput.value);
+        
+        if (duration >= threshold) {
+          // É uma nota longa válida
+          note.duration = duration;
+        } else {
+          // Duração muito curta - transformar em nota simples
+          const index = notes.indexOf(note);
+          if (index !== -1) {
+            notes[index] = {
+              time: note.time,
+              direction: note.direction,
+              bpm: note.bpm
+            };
+          }
+        }
+        
+        activeHolds[direction] = null;
+        updateNotesList();
+        console.log('Fim de nota longa:', note);
+      }
+    }
+
+    // Eventos de clique nos botões
+    Object.entries(directionButtons).forEach(([dir, btn]) => {
+      btn.addEventListener('mousedown', () => addNote(dir));
+      btn.addEventListener('mouseup', () => endHoldNote(dir));
+      btn.addEventListener('mouseleave', () => endHoldNote(dir));
+    });
+
+    // Eventos de teclado
+    document.addEventListener('keydown', (e) => {
+      const direction = keyMap[e.key];
+      
+      if (direction) {
+        e.preventDefault(); // Evitar comportamento padrão (rolagem da página)
+        addNote(direction);
+      }
+      
+      // Espaço para play/pause
+      if (e.key === ' ') {
+        e.preventDefault();
+        if (audio.paused) {
+          audio.play();
+        } else {
+          audio.pause();
+        }
+      }
+    });
+
+    document.addEventListener('keyup', (e) => {
+      const direction = keyMap[e.key];
+      if (direction) {
+        e.preventDefault();
+        endHoldNote(direction);
+      }
+    });
+
+    // Salvar chart
+    document.getElementById('save').addEventListener('click', () => {
+      const data = {
+        song: 'song.mp3',
+        bpm: parseInt(bpmInput.value),
+        holdThreshold: parseFloat(holdThresholdInput.value),
+        notes: notes.sort((a, b) => a.time - b.time)
+      };
+      
+      const json = JSON.stringify(data, null, 2);
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'fnf_chart.json';
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 100);
+    });
+
+    // Limpar tudo
+    document.getElementById('clear').addEventListener('click', () => {
+      notes.length = 0;
+      Object.keys(activeHolds).forEach(key => activeHolds[key] = null);
+      updateNotesList();
+    });
+  </script>
+</body>
+</html>
