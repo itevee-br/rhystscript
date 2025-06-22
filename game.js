@@ -6,7 +6,7 @@ const chartData = JSON.parse(document.getElementById("chart-data").textContent);
 // Configurações básicas com hitWindow proporcional
 const config = {
   baseSpeed: 0.3,
-  speed: 0.5,
+  speed: 0.6,//0.5
   judgePosition: 0.2,
   noteSize: 80,
   baseHitWindow: 50,
@@ -15,7 +15,7 @@ const config = {
     const increaseFactor = 1 + (speedDifference * 1);
     return Math.round(this.baseHitWindow * increaseFactor * 100) / 100;
   },
-  fundoMuda: true
+  fundoMuda: false
 };
 
 // Função para alterar a velocidade
@@ -37,7 +37,12 @@ const state = {
   carregamentoInstantaneo: false,
   bgColorTimeout: null,
   currentBgColor: '#111',
-  gamepadAtivo: false
+  gamepadAtivo: false,
+  gameFinished: false,
+  resultsScreen: null,
+  metaTotal: 0,
+  notesTotal:0,
+  acertos: 0
 };
 
 // Referências das pistas
@@ -192,6 +197,13 @@ function updateNotes(timestamp) {
   const delta = timestamp - state.lastTime;
   state.lastTime = timestamp;
 
+  // Verificar se a música acabou
+  if (state.songElement && state.songElement.ended && !state.gameFinished) {
+    showResults();
+    state.gameFinished = true;
+    return;
+  }
+
   const judgeX = window.innerWidth * config.judgePosition;
   const missThreshold = judgeX - 100;
 
@@ -251,6 +263,7 @@ function checkHit(direction) {
     const accuracy = closestDistance / config.hitWindow;
     const points = accuracy > 0.7 ? 10 : accuracy > 0.3 ? 15 : 20;
     updateScore(points);
+    state.acertos++;
 
     if (config.fundoMuda) {
       if (state.bgColorTimeout) clearTimeout(state.bgColorTimeout);
@@ -278,6 +291,8 @@ function calculateSpawnTime(noteTime, speed) {
 }
 
 function scheduleNotes(chartData) {
+  state.metaTotal = chartData.notes.length * 10; // Cada nota vale 10 pontos no máximo
+  state.notesTotal = chartData.notes.length;
   const futuras = [];
   chartData.notes.forEach(note => {
     const spawnTime = calculateSpawnTime(note.time, config.speed);
@@ -327,6 +342,14 @@ function startGame() {
 async function initGame() {
   document.getElementById('loading-bar').style.display = 'none';
   document.getElementById('loading-status').style.display = 'none';
+  
+  // Inicializar referência à tela de resultados
+  state.resultsScreen = document.getElementById('results-screen');
+  if (state.resultsScreen) {
+    state.resultsScreen.classList.add('hidden');
+    state.resultsScreen.classList.remove('visible');
+  }
+  
   await loadAudio();
 }
 
@@ -342,3 +365,92 @@ window.addEventListener('load', () => {
     startGame();
   });
 });
+
+function showResults() {
+  if (!state.resultsScreen) {
+    state.resultsScreen = document.getElementById('results-screen');
+  }
+  
+  const finalScore = document.getElementById('final-score');
+  const finalCombo = document.getElementById('final-combo');
+  const finalNotes = document.getElementById('final-notes');
+  
+  // Calcular porcentagem (agora pode ser maior que 100%)
+  let porcentagem = 0;
+  if (state.metaTotal > 0) {
+    porcentagem = Math.round((state.score / state.metaTotal) * 100);
+  }
+  const totalNotes = chartData.notes.length;
+  const porcentagemCombo = Math.round((state.maxCombo / totalNotes) * 100);
+  const porcentagemNotes = Math.round((state.acertos / totalNotes) * 100);
+  
+  // Atualizar elementos com os resultados
+  finalScore.textContent = `Pontuação: ${state.score} (${porcentagem}%)`;
+  finalCombo.textContent = `Combo Máximo: ${state.maxCombo} (${porcentagemCombo}%)`;
+  finalNotes.textContent = `Acertos: ${state.acertos} / ${state.notesTotal} (${porcentagemNotes}%)`;
+  
+  // Aplicar classe CSS baseada no desempenho
+  finalScore.className = ''; // Limpa classes anteriores
+  if (porcentagem >= 150) {
+    finalScore.classList.add('godlike-score');
+  } else if (porcentagem >= 120) {
+    finalScore.classList.add('perfect-score');
+  } else if (porcentagem >= 100) {
+    finalScore.classList.add('excellent-score');
+  } else if (porcentagem >= 80) {
+    finalScore.classList.add('great-score');
+  } else if (porcentagem >= 65) {
+    finalScore.classList.add('good-score');
+  } else if (porcentagem >= 50) {
+    finalScore.classList.add('average-score');
+  } else {
+    finalScore.classList.add('low-score');
+  }
+
+  //para o combo agora
+  finalCombo.className = '';
+  if (porcentagemCombo >= 100) {
+    finalCombo.classList.add('perfect-score');
+  } else if (porcentagemCombo >= 80) {
+    finalCombo.classList.add('excellent-score');
+  } else if (porcentagemCombo >= 60) {
+    finalCombo.classList.add('great-score');
+  } else if (porcentagemCombo >= 40) {
+    finalCombo.classList.add('good-score');
+  } else if (porcentagemCombo >= 20) {
+    finalCombo.classList.add('average-score');
+  } else {
+    finalCombo.classList.add('low-score');
+  }
+
+  //para as notas
+  finalNotes.className = '';
+  if (porcentagemNotes >= 100) {
+    finalNotes.classList.add('perfect-score');
+  } else if (porcentagemNotes >= 80) {
+    finalNotes.classList.add('excellent-score');
+  } else if (porcentagemNotes >= 60) {
+    finalNotes.classList.add('great-score');
+  } else if (porcentagemNotes >= 40) {
+    finalNotes.classList.add('good-score');
+  } else if (porcentagemNotes >= 20) {
+    finalNotes.classList.add('average-score');
+  } else {
+    finalNotes.classList.add('low-score');
+  }
+  
+  // Mostrar a tela de resultados com animação
+  state.resultsScreen.classList.remove('hidden');
+  setTimeout(() => {
+    state.resultsScreen.classList.add('visible');
+  }, 10);
+  
+  // Configurar eventos dos botões
+  document.getElementById('play-again-button').onclick = function() {
+    location.reload();
+  };
+  
+  document.getElementById('change-song-button').onclick = function() {
+    window.location.href = '../index.html';
+  };
+}

@@ -1,0 +1,327 @@
+{
+  "song": "mine-a-miku-big-shot.mp3",
+  "bpm": 120,
+  "holdThreshold": 0.1,
+  "notes": [
+    {
+      "time": 0.158722,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 0.592402,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 0.934486,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 1.334578,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 1.657516,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 1.87307,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 2.318528,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 2.884256,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 3.346458,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 3.68167,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 4.078298,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 4.484818,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 4.918612,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 5.103666,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 5.56337,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 6.147496,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 6.544456,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 6.847798,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 7.243168,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 7.674348,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 8.120508,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 8.344004,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 8.740356,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 9.223736,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 9.727752,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 10.092246,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 10.453328,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 10.874864,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 11.310284,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 11.525292,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 11.963008,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 12.487446,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 12.893856,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 13.279204,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 13.648206,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 14.044782,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 14.437878,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 14.62168,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 15.078646,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 15.649034,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 16.032286,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 16.411118,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 16.787898,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 17.219506,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 17.67139,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 17.876826,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 18.299712,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 18.843252,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 19.219316,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 19.585496,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 20.01316,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 20.403142,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 20.865922,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 21.058236,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 21.483872,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 22.017846,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 22.417442,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 22.805766,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 23.234914,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 23.618672,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 24.041638,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 24.229656,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 24.639876,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 25.138826,
+      "direction": "left",
+      "bpm": 120
+    }
+  ]
+}

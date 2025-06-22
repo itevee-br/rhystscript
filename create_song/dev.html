@@ -15,12 +15,38 @@
     }
     .note-hold { background: #ffeb3b; }
     .config-section { margin: 15px 0; padding: 10px; border: 1px solid #ddd; background: #f9f9f9; }
+    .speed-controls { margin: 10px 0; }
+    #chart-display { 
+      margin-top: 20px; 
+      border: 1px solid #ccc; 
+      padding: 10px; 
+      background: #f9f9f9; 
+      white-space: pre-wrap;
+      max-height: 300px;
+      overflow-y: auto;
+      display: none;
+    }
+    #chart-json {
+      font-family: monospace;
+    }
   </style>
 </head>
 <body>
   <h1>Editor de Chart com Teclado</h1>
   <div id="editor">
-    <audio id="preview" controls src="Porão.mp3"></audio>
+    <audio id="preview" controls src="ABYSSAL BLADE - Fleeting Hope.mp3"></audio>
+    
+    <div class="speed-controls">
+      <label>Velocidade de reprodução:
+        <select id="playback-rate">
+          <option value="0.5">0.5x (Mais lento)</option>
+          <option value="0.75">0.75x</option>
+          <option value="1" selected>1x (Normal)</option>
+          <option value="1.25">1.25x</option>
+          <option value="1.5">1.5x</option>
+        </select>
+      </label>
+    </div>
     
     <div class="config-section">
       <div>
@@ -47,9 +73,16 @@
     <div>
       <button id="save">Salvar Chart</button>
       <button id="clear">Limpar Tudo</button>
+      <button id="show-json">Mostrar JSON do Chart</button>
     </div>
     <h3>Notas Adicionadas:</h3>
     <div id="notes-list"></div>
+    
+    <div id="chart-display">
+      <h3>JSON do Chart:</h3>
+      <pre id="chart-json"></pre>
+      <button id="copy-json">Copiar JSON</button>
+    </div>
   </div>
 
   <script>
@@ -59,6 +92,9 @@
     const bpmInput = document.getElementById('bpm');
     const holdModeCheckbox = document.getElementById('hold-mode');
     const holdThresholdInput = document.getElementById('hold-threshold');
+    const playbackRateSelect = document.getElementById('playback-rate');
+    const chartDisplay = document.getElementById('chart-display');
+    const chartJson = document.getElementById('chart-json');
 
     // Variáveis para controle de notas longas
     const activeHolds = {
@@ -88,6 +124,37 @@
       'right': document.getElementById('right-btn')
     };
 
+    // Variável para armazenar o tempo de início
+    let audioStartTime = 0;
+    let isPlaying = false;
+
+    // Atualizar velocidade de reprodução
+    playbackRateSelect.addEventListener('change', () => {
+      const rate = parseFloat(playbackRateSelect.value);
+      audio.playbackRate = rate;
+    });
+
+    // Monitorar quando o áudio começa a tocar
+    audio.addEventListener('play', () => {
+      audioStartTime = performance.now();
+      isPlaying = true;
+    });
+
+    audio.addEventListener('pause', () => {
+      isPlaying = false;
+    });
+
+    // Obter tempo real com alta precisão
+    function getRealTime() {
+      if (!isPlaying) return 0;
+      
+      const rate = parseFloat(playbackRateSelect.value);
+      const currentTime = (performance.now() - audioStartTime) / 1000;
+      
+      // O tempo real é o tempo decorrido MULTIPLICADO pela velocidade
+      return currentTime * rate;
+    }
+
     // Atualizar lista de notas
     function updateNotesList() {
       notesList.innerHTML = '';
@@ -95,9 +162,9 @@
         const noteElement = document.createElement('div');
         noteElement.className = `note-item ${note.duration ? 'note-hold' : ''}`;
         
-        let noteInfo = `${index + 1}. Tempo: ${note.time.toFixed(2)}s - ${note.direction}`;
+        let noteInfo = `${index + 1}. Tempo: ${note.time.toFixed(4)}s - ${note.direction}`;
         if (note.duration) {
-          noteInfo += ` (Duração: ${note.duration.toFixed(2)}s)`;
+          noteInfo += ` (Duração: ${note.duration.toFixed(4)}s)`;
         }
         
         noteElement.innerHTML = `
@@ -116,12 +183,22 @@
 
     // Adicionar nota (curta ou início de nota longa)
     function addNote(direction) {
+      const currentTime = getRealTime();
+      
+      // Verificar se já existe uma nota muito próxima
+      const existingNote = notes.find(n => 
+        n.direction === direction && 
+        Math.abs(n.time - currentTime) < 0.05
+      );
+      
+      if (existingNote) return; // Ignora se já existe uma nota próxima
+      
       if (holdModeCheckbox.checked) {
         // Se já existe uma nota longa ativa nesta direção, ignorar
         if (activeHolds[direction]) return;
         
         const newNote = {
-          time: audio.currentTime,
+          time: currentTime,
           direction: direction,
           bpm: parseInt(bpmInput.value),
           duration: 0 // Será atualizado quando a tecla for solta
@@ -134,7 +211,7 @@
       } else {
         // Nota curta
         const newNote = {
-          time: audio.currentTime,
+          time: currentTime,
           direction: direction,
           bpm: parseInt(bpmInput.value)
         };
@@ -155,21 +232,18 @@
       
       const note = activeHolds[direction];
       if (note) {
-        const duration = audio.currentTime - note.time;
+        const currentTime = getRealTime();
+        const duration = currentTime - note.time;
         const threshold = parseFloat(holdThresholdInput.value);
         
         if (duration >= threshold) {
           // É uma nota longa válida
           note.duration = duration;
         } else {
-          // Duração muito curta - transformar em nota simples
+          // Duração muito curta - remover a nota
           const index = notes.indexOf(note);
           if (index !== -1) {
-            notes[index] = {
-              time: note.time,
-              direction: note.direction,
-              bpm: note.bpm
-            };
+            notes.splice(index, 1);
           }
         }
         
@@ -214,15 +288,34 @@
       }
     });
 
-    // Salvar chart
-    document.getElementById('save').addEventListener('click', () => {
-      const data = {
-        song: 'song.mp3',
+    // Gerar o JSON do chart
+    function generateChartJson() {
+      return {
+        song: 'mine-a-miku-big-shot.mp3',
         bpm: parseInt(bpmInput.value),
         holdThreshold: parseFloat(holdThresholdInput.value),
         notes: notes.sort((a, b) => a.time - b.time)
       };
-      
+    }
+
+    // Mostrar JSON na tela
+    document.getElementById('show-json').addEventListener('click', () => {
+      const chartData = generateChartJson();
+      chartJson.textContent = JSON.stringify(chartData, null, 2);
+      chartDisplay.style.display = 'block';
+    });
+
+    // Copiar JSON para área de transferência
+    document.getElementById('copy-json').addEventListener('click', () => {
+      const jsonText = chartJson.textContent;
+      navigator.clipboard.writeText(jsonText)
+        .then(() => alert('JSON copiado para a área de transferência!'))
+        .catch(err => console.error('Erro ao copiar:', err));
+    });
+
+    // Salvar chart
+    document.getElementById('save').addEventListener('click', () => {
+      const data = generateChartJson();
       const json = JSON.stringify(data, null, 2);
       const blob = new Blob([json], { type: 'application/json' });
       const url = URL.createObjectURL(blob);

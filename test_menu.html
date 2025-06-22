@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rhytscript</title>
+  <link rel="stylesheet" href="css/menu.css" />
+</head>
+<body>
+  <div class="audio-bars-container"></div>
+
+  <button class="theme-toggle" id="themeToggle">🌓</button>
+  <div class="titulo">
+    <img src="img/rhytscript.png" alt="Rhytscript Logo" class="nome">
+    <div class="platform-tag">test version</div>
+  </div>
+
+  <div class="coisas">
+    <ul>
+      <a href="play.html">
+        <button class="play">
+          <span class="btn-text">play</span>
+          <img 
+            src="img/xbox/btn_a.png" 
+            data-img="img/xbox/btn_a.png"
+            data-img-hover="img/xbox/btn_aa.png"
+            alt="A" 
+            class="xbox-icon icon-right"
+          />
+        </button>
+      </a>
+    </ul>
+    <ul>
+      <a href="https://seulinkconfig.com">
+        <button class="conf">
+          <span class="btn-text">config</span>
+          <img 
+            src="img/xbox/btn_x.png" 
+            data-img="img/xbox/btn_x.png"
+            data-img-hover="img/xbox/btn_xx.png"
+            alt="X" 
+            class="xbox-icon icon-left"
+          />
+        </button>
+      </a>
+    </ul>
+    <ul>
+      <a href="https://seulinkmake.com">
+        <button class="make">
+          <span class="btn-text">make</span>
+          <img 
+            src="img/xbox/btn_y.png" 
+            data-img="img/xbox/btn_y.png"
+            data-img-hover="img/xbox/btn_yy.png"
+            alt="Y" 
+            class="xbox-icon icon-top"
+          />
+        </button>
+      </a>
+    </ul>
+  </div>
+
+  <a href="https://github.com/itevee-br" class="github-footer" target="_blank">github.com/itevee-br</a>
+
+  <script>
+    const themeToggle = document.getElementById('themeToggle');
+    const body = document.body;
+
+    const savedTheme = localStorage.getItem('theme') || 
+      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
+    if (savedTheme === 'dark') {
+      body.classList.add('dark-mode');
+      themeToggle.textContent = '☀️';
+    } else {
+      themeToggle.textContent = '🌙';
+    }
+
+    themeToggle.addEventListener('click', () => {
+      body.classList.toggle('dark-mode');
+      const isDark = body.classList.contains('dark-mode');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      themeToggle.textContent = isDark ? '☀️' : '🌙';
+    });
+
+    // HOVER DINÂMICO
+    document.querySelectorAll('.coisas button').forEach(button => {
+      const img = button.querySelector('img');
+      const defaultSrc = img.dataset.img;
+      const hoverSrc = img.dataset.imgHover;
+
+      button.addEventListener('mouseenter', () => img.src = hoverSrc);
+      button.addEventListener('mouseleave', () => {
+        if (!button.classList.contains('hover-simulated')) {
+          img.src = defaultSrc;
+        }
+      });
+
+      const observer = new MutationObserver(() => {
+        img.src = button.classList.contains('hover-simulated') ? hoverSrc : defaultSrc;
+      });
+
+      observer.observe(button, { attributes: true, attributeFilter: ['class'] });
+    });
+
+    // FUNÇÃO CENTRALIZADA PARA GAMEPAD/TECLADO
+    function ativarBotao(selector) {
+      const btnElement = document.querySelector(selector);
+      if (!btnElement) return;
+
+      btnElement.classList.add('hover-simulated');
+
+      setTimeout(() => {
+        btnElement.classList.remove('hover-simulated');
+      }, 300);
+
+      setTimeout(() => {
+        const parentLink = btnElement.closest('a');
+        if (parentLink && parentLink.href) window.location.href = parentLink.href;
+      }, 350);
+    }
+
+    // GAMEPAD
+    const buttonsMap = {
+      0: '.play', 
+      2: '.conf', 
+      3: '.make'
+    };
+
+    let prevPressed = {};
+
+    function pollGamepads() {
+      const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
+
+      for (const gp of gamepads) {
+        if (!gp) continue;
+
+        for (const [btnIndex, selector] of Object.entries(buttonsMap)) {
+          const button = gp.buttons[btnIndex];
+          if (!button) continue;
+
+          if (button.pressed && !prevPressed[btnIndex]) {
+            ativarBotao(selector);
+          }
+
+          prevPressed[btnIndex] = button.pressed;
+        }
+      }
+
+      requestAnimationFrame(pollGamepads);
+    }
+
+    window.addEventListener('gamepadconnected', () => {
+      console.log('Gamepad conectado!');
+      pollGamepads();
+    });
+
+    window.addEventListener('gamepaddisconnected', () => {
+      console.log('Gamepad desconectado!');
+    });
+
+    // TECLADO
+    window.addEventListener('keydown', (e) => {
+      const key = e.key.toLowerCase();
+      if (key === 'a') ativarBotao('.play');
+      if (key === 'x') ativarBotao('.conf');
+      if (key === 'y') ativarBotao('.make');
+    });
+
+    // BARRAS MUSICAIS
+    document.addEventListener('DOMContentLoaded', function () {
+      const container = document.querySelector('.audio-bars-container');
+      container.innerHTML = '';
+      const barCount = Math.min(30, Math.max(15, Math.floor(window.innerWidth / 20)));
+
+      const colors = [
+        'var(--play-btn)', 'var(--conf-btn)', 'var(--make-btn)',
+        'linear-gradient(to top, var(--play-btn), var(--conf-btn))',
+        'linear-gradient(to top, var(--conf-btn), var(--make-btn))',
+        'linear-gradient(to top, var(--make-btn), var(--play-btn))'
+      ];
+
+      for (let i = 0; i < barCount; i++) {
+        const bar = document.createElement('div');
+        bar.className = 'audio-bar';
+        bar.style.cssText = `
+          height: ${10 + Math.random() * 90}%;
+          animation-delay: ${Math.random() * 3}s;
+          animation-duration: ${1 + Math.random() * 2}s;
+          background: ${colors[Math.floor(Math.random() * colors.length)]};
+        `;
+        if (Math.random() > 0.7) {
+          bar.style.width = `${3 + Math.random() * 3}%`;
+        }
+        container.appendChild(bar);
+      }
+
+      window.addEventListener('resize', function () {
+        if (this.innerWidth !== this.lastWidth) {
+          this.lastWidth = this.innerWidth;
+          document.dispatchEvent(new Event('DOMContentLoaded'));
+        }
+      });
+    });
+
+    // EFEITO LOGO
+    const logo = document.querySelector('.nome');
+    let currentX = 0, currentY = 0, targetX = 0, targetY = 0;
+    const maxTilt = 15, ease = 0.1;
+
+    document.addEventListener('mousemove', e => {
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      const offsetX = (e.clientX - centerX) / centerX;
+      const offsetY = (e.clientY - centerY) / centerY;
+      targetX = offsetY * maxTilt;
+      targetY = -offsetX * maxTilt;
+    });
+
+    document.addEventListener('mouseleave', () => {
+      targetX = 0;
+      targetY = 0;
+    });
+
+    function animate() {
+      currentX += (targetX - currentX) * ease;
+      currentY += (targetY - currentY) * ease;
+      logo.style.transform = `rotateX(${currentX}deg) rotateY(${currentY}deg)`;
+      requestAnimationFrame(animate);
+    }
+    animate();
+  </script>
+</body>
+</html>

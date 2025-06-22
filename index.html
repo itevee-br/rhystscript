@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seleção de Música | Seu Jogo Musical</title>
+    <link rel="stylesheet" href="css/play.css">
+    <style>
+        /* Adiciona o CSS da seleção de música que forneci anteriormente aqui */
+        /* (Todo o CSS que enviei na resposta anterior) */
+    </style>
+</head>
+<body>
+    <!-- Elemento de fundo borrado (coloque como PRIMEIRO elemento do body) -->
+<div class="blurred-bg-container">
+    <div class="blurred-bg" id="blurredBackground"></div>
+    <div class="blurred-overlay"></div>
+</div>
+    <div class="music-selection-container">
+        <!-- Painel esquerdo - Detalhes da música -->
+        <div class="music-details-panel">
+            <img src="https://via.placeholder.com/400x400/1e1e1e/4CAF50?text=Capa+Album" alt="Capa do Álbum" class="music-cover" id="musicCover">
+            
+            <div class="music-info">
+    <h1 class="music-title" id="musicTitle">TÍTULO DA MÚSICA</h1>
+    
+    <div class="music-meta-grid">
+        <div class="meta-item">
+            <span class="meta-label">autor:</span>
+            <a href="LINK_DO_YOUTUBE" id="musicAuthorLink" target="_blank" class="author-link">nome_do_autor</a>
+        </div>
+        <div class="meta-item">
+            <span class="meta-label">dificuldade:</span>
+            <span id="musicDifficultyText">fácil</span>
+        </div>
+        <div class="meta-item">
+            <span class="meta-label">tags:</span>
+            <span id="musicTagsComma">legal, fundo_interativo</span>
+        </div>
+    </div>
+    
+    <button class="play-music-btn" id="playMusicBtn">
+    <span class="btn-text">JOGAR</span>
+    <div class="xbox-btn-container">
+        <img src="img/xbox/btn_x.png" alt="Xbox X" class="xbox-icon xbox-default">
+        <img src="img/xbox/btn_xx.png" alt="Xbox X Pressed" class="xbox-icon xbox-pressed">
+    </div>
+</button>
+
+</div>
+        </div>
+        
+        <!-- Painel direito - Lista de músicas -->
+        <div class="music-carousel-panel">
+            <h2 class="music-carousel-title">ESCOLHA SUA MÚSICA</h2>
+            
+            <div class="music-search">
+                <input type="text" placeholder="Pesquisar músicas..." id="musicSearch">
+            </div>
+            
+            <div class="music-filters">
+                <button class="filter-btn active" data-filter="all">Todas</button>
+                <button class="filter-btn" data-filter="easy">Fácil</button>
+                <button class="filter-btn" data-filter="medium">Médio</button>
+                <button class="filter-btn" data-filter="hard">Difícil</button>
+                <button class="filter-btn" data-filter="interactive">Interativo</button>
+            </div>
+            
+            <div class="music-list" id="musicList">
+                <!-- Músicas serão adicionadas dinamicamente -->
+            </div>
+        </div>
+    </div>
+    
+    <a href="https://github.com/itevee-br" class="github-footer" target="_blank">github</a>
+    
+    <script>
+        // Dados das músicas de exemplo
+        const musicas = [
+            {
+                id: 1,
+                title: "Joyful - Chess(Slowed)",
+                artist: "MrMoMMusic",
+                link: "https://youtu.be/su5D_3gBHzU?si=NvQ-161QfEYMGDYa",
+                caminho: "1/index.html",
+                cover: "1/duck.gif",
+                backgroundImage: "",
+                difficulty: "easy",
+                bpm: 128,
+                duration: "2:22",
+                tags: ["Fundo Interativo", "Test"],
+                audioPreview: true
+            },
+            {
+                id: 2,
+                title: "MINE - A Miku BIG SHOT",
+                artist: "X.A",
+                link: "https://youtu.be/PZ4RjFJsrJY?si=GlK8eBccoBA4p1Pu",
+                caminho: "2/index.html",
+                cover: "2/print.png",
+                backgroundImage: "2/bg.jpg",
+                difficulty: "hard",
+                bpm: 128,
+                duration: "2:11",
+                tags: ["spam", "hatsune-miku"],
+                audioPreview: true
+            },
+            {
+                id: 3,
+                title: "Fleeting Hope",
+                artist: "delIsaak Wolf",
+                link: "https://youtu.be/K3ubUlAJmz8?si=MK9E3iJJVwc5qwsv",
+                caminho: "3/index.html",
+                cover: "3/print.png",
+                backgroundImage: "3/crimson.jpg",
+                difficulty: "medium",
+                bpm: 95,
+                duration: "1:36",
+                tags: ["Lento", "ABYSSAL BLADE"],
+                audioPreview: false
+            }
+        ];
+
+// Elementos DOM
+const musicList = document.getElementById('musicList');
+const musicTitle = document.getElementById('musicTitle');
+const musicArtist = document.getElementById('musicArtist');
+const musicCover = document.getElementById('musicCover');
+const musicDifficulty = document.getElementById('musicDifficulty');
+const musicTags = document.getElementById('musicTags');
+const filterButtons = document.querySelectorAll('.filter-btn');
+const musicSearch = document.getElementById('musicSearch');
+const playMusicBtn = document.getElementById('playMusicBtn');
+const carouselPanel = document.querySelector('.music-carousel-panel');
+
+// Música selecionada
+let selectedMusic = null;
+
+// Função de inicialização da página
+function initializePage() {
+    // Configurações de estilo
+    document.body.style.overflow = 'hidden';
+    carouselPanel.style.outline = 'none';
+    carouselPanel.setAttribute('tabindex', '0');
+    
+    // Configura o tema
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+    }
+    
+    // Ativa o filtro "Todas" e força a seleção inicial
+    forceInitialLoad();
+}
+
+// Função para forçar o carregamento inicial
+function forceInitialLoad() {
+    // 1. Ativa visualmente o filtro "Todas"
+    filterButtons.forEach(btn => btn.classList.remove('active'));
+    document.querySelector('.filter-btn[data-filter="all"]').classList.add('active');
+    
+    // 2. Carrega todas as músicas
+    loadMusicList('all', '', true);
+    
+    // 3. Seleciona a primeira música (ID mais baixo)
+    if (musicas.length > 0) {
+        // Encontra a música com o ID mais baixo
+        const firstMusic = musicas.reduce((prev, current) => 
+            prev.id < current.id ? prev : current);
+        
+        selectMusic(firstMusic, false);
+        
+        // Marca visualmente como ativa
+        setTimeout(() => {
+            const firstItem = document.querySelector('.music-item');
+            if (firstItem) firstItem.classList.add('active');
+        }, 50);
+    }
+}
+
+// Função para carregar a lista de músicas
+function loadMusicList(filter = 'all', search = '', isInitialLoad = false) {
+    musicList.innerHTML = '';
+    
+    const filteredMusicas = musicas.filter(music => {
+        const matchesFilter = filter === 'all' || 
+                             music.difficulty === filter || 
+                             (filter === 'interactive' && music.tags.includes('Fundo Interativo'));
+        
+        const matchesSearch = search === '' || 
+                             music.title.toLowerCase().includes(search.toLowerCase()) || 
+                             music.artist.toLowerCase().includes(search.toLowerCase());
+        
+        return matchesFilter && matchesSearch;
+    });
+    
+    if (filteredMusicas.length === 0) {
+        musicList.innerHTML = '<div class="no-results">Nenhuma música encontrada</div>';
+        if (!isInitialLoad) clearMusicDisplay();
+        return;
+    }
+    
+    filteredMusicas.forEach(music => {
+        const musicItem = document.createElement('div');
+        musicItem.className = 'music-item';
+        
+        musicItem.innerHTML = `
+            <img src="${music.cover}" alt="${music.title}" class="music-item-cover">
+            <div class="music-item-info">
+                <div class="music-item-title">${music.title}</div>
+                <div class="music-item-artist">${music.artist} • ${music.duration} • ${music.bpm} BPM</div>
+            </div>
+        `;
+        
+        musicItem.addEventListener('click', () => {
+            selectMusic(music, true);
+            document.querySelectorAll('.music-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            musicItem.classList.add('active');
+        });
+        
+        musicList.appendChild(musicItem);
+    });
+}
+
+// Função para limpar a exibição quando não há resultados
+function clearMusicDisplay() {
+    musicTitle.textContent = '...';
+    document.getElementById('musicArtist').textContent = '';
+    document.getElementById('musicLink').href = '#';
+    document.getElementById('musicDifficultyText').textContent = '';
+    document.getElementById('musicPrimaryTag').textContent = '';
+    musicCover.src = 'https://via.placeholder.com/400x400/1e1e1e/555555?text=Sem+Capa';
+    musicDifficulty.textContent = '';
+    musicDifficulty.className = 'difficulty-level';
+    musicTags.innerHTML = '';
+}
+
+// Função para selecionar uma música
+function selectMusic(music, isUserInteraction = false) {
+    // Verificação inicial de segurança
+    if (!music) {
+        console.error("Nenhuma música fornecida para seleção");
+        return;
+    }
+
+    selectedMusic = music;
+
+    // Debug: verifica se elementos críticos existem
+    const elementsToCheck = [
+        'musicTitle', 'musicCover', 'musicAuthorLink', 
+        'musicDifficultyText', 'musicTagsComma', 'blurredBackground'
+    ];
+    
+    elementsToCheck.forEach(id => {
+        if (!document.getElementById(id)) {
+            console.error(`Elemento não encontrado: ${id}`);
+        }
+    });
+
+    // Atualiza elementos principais com verificação
+    if (musicTitle) musicTitle.textContent = music.title;
+    if (musicCover) musicCover.src = music.cover;
+
+    // Atualização segura dos metadados
+    const authorLink = document.getElementById('musicAuthorLink');
+    if (authorLink) {
+        authorLink.textContent = music.artist;
+        authorLink.href = music.link || '#';
+    }
+
+    const difficultyText = document.getElementById('musicDifficultyText');
+    if (difficultyText) {
+        difficultyText.textContent = 
+            music.difficulty === 'easy' ? 'fácil' :
+            music.difficulty === 'medium' ? 'médio' : 'difícil';
+    }
+
+    // Atualização segura das tags
+    const tagsElement = document.getElementById('musicTagsComma');
+    if (tagsElement) {
+        tagsElement.textContent = music.tags.join(', ');
+    }
+
+    // Atualização visual da dificuldade
+    if (musicDifficulty) {
+        musicDifficulty.textContent = music.difficulty.toUpperCase();
+        musicDifficulty.className = 'difficulty-level';
+        musicDifficulty.classList.add(`difficulty-${music.difficulty}`);
+    }
+
+    // Atualização do fundo borrado COM DEBUG
+    const bgElement = document.getElementById('blurredBackground');
+    if (bgElement) {
+        console.log("Elemento blurredBackground encontrado!");
+        //alert("Elemento encontrado - antes da mudança de background");
+        
+        const bgUrl = music.backgroundImage || music.cover;
+        console.log(`Tentando carregar: ${bgUrl}`);
+        
+        bgElement.style.backgroundImage = `url('${bgUrl}')`;
+        bgElement.style.opacity = '0.7';
+        
+        //alert("Background atualizado para: " + bgUrl);
+    } else {
+        console.error("Elemento blurredBackground NÃO encontrado!");
+        alert("ERRO: Elemento blurredBackground não existe no DOM");
+    }
+
+    // Atualização das tags visuais
+    if (musicTags) {
+        musicTags.innerHTML = '';
+        music.tags.forEach(tag => {
+            const tagElement = document.createElement('span');
+            tagElement.className = 'music-tag';
+            tagElement.textContent = tag;
+            musicTags.appendChild(tagElement);
+        });
+    }
+
+    updateAudioBars(music.audioPreview);
+
+    if (isUserInteraction) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    console.log(`Música "${music.title}" selecionada`, music);
+}
+
+// Event listeners
+filterButtons.forEach(button => {
+    button.addEventListener('click', function() {
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+        loadMusicList(this.dataset.filter);
+    });
+});
+
+musicSearch.addEventListener('input', () => {
+    const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+    loadMusicList(activeFilter, musicSearch.value);
+});
+
+playMusicBtn.addEventListener('click', async function() {
+    if (!selectedMusic?.caminho) {
+        // Feedback visual de erro
+        this.classList.add('btn-error');
+        setTimeout(() => this.classList.remove('btn-error'), 500);
+        return;
+    }
+
+    // Animação de clique
+    this.classList.add('btn-clicked');
+    
+    // Animação do botão Xbox
+    const xboxIcons = this.querySelectorAll('.xbox-icon');
+    xboxIcons[0].style.transform = 'scale(0)';
+    xboxIcons[1].style.transform = 'scale(1.3)';
+    
+    // Delay para redirecionamento
+    await new Promise(resolve => setTimeout(resolve, 350));
+    window.location.href = selectedMusic.caminho;
+});
+
+// Adicione este evento para controle com tecla 'X'
+document.addEventListener('keydown', (e) => {
+    if (e.key.toLowerCase() === 'x' && selectedMusic?.caminho) {
+        const btn = document.getElementById('playMusicBtn');
+        btn.classList.add('force-hover');
+        btn.click();
+    }
+});
+
+
+// Impede scroll na página principal (exceto no carrossel)
+document.body.addEventListener('wheel', (e) => {
+    const isOverCarousel = e.target.closest('.music-carousel-panel');
+    if (!isOverCarousel) e.preventDefault();
+}, { passive: false });
+
+// Inicializa a página quando carregada
+window.addEventListener('DOMContentLoaded', initializePage);
+    </script>
+</body>
+</html>

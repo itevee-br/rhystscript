@@ -1,0 +1,868 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>ABYSSAL BLADE</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="shortcut icon" href="print.png" type="image/x-icon">
+</head>
+<body>
+  <img id="background-gif" src="noite.gif" alt="Background animation">
+
+  <div id="loading-menu">
+    <div id="loading-title">Use as setas para jogar <br>ou ABXY (console)</div>
+    <div id="loading-bar"><div id="loading-progress"></div></div>
+    <div id="loading-status">Preparando o jogo...</div>
+    <button id="start-button">Começar</button>
+  </div>
+
+  <div class="game-container">
+    <div class="lane" id="lane-up"><div class="judge-line"></div><div class="receptor">↑</div></div>
+    <div class="lane" id="lane-left"><div class="judge-line"></div><div class="receptor">←</div></div>
+    <div class="lane" id="lane-right"><div class="judge-line"></div><div class="receptor">→</div></div>
+    <div class="lane" id="lane-down"><div class="judge-line"></div><div class="receptor">↓</div></div>
+  </div>
+
+  <div id="hud">
+    <div id="score">Pontuação: 0</div>
+    <div id="combo">Combo: 0</div>
+  </div>
+
+  <script id="chart-data" type="application/json">
+  {
+  "song": "ABYSSAL BLADE - Fleeting Hope.mp3",
+  "bpm": 120,
+  "holdThreshold": 0.1,
+  "notes": [
+    {
+      "time": 16.206,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 16.714,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 18.142275000013413,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 18.7725,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 19.884375,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 20.442825000017883,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 21.90097500000894,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 22.442175000004468,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 23.79360000000894,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 24.42607500001788,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 25.73782500001788,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 26.31322500000894,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 27.83985000000894,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 28.43565000001341,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 29.84190000001341,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 30.413025000013413,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 31.910925000004468,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 32.51565000001341,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 33.87180000000447,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 34.48740000001341,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 35.946225000008944,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 36.38535000000894,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 37.86442500000447,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 38.4615,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 39.832499999999996,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 40.45672500000894,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 41.81790000001341,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 42.400124999999996,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 43.86060000000894,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 44.46525,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 45.72120000001788,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 46.509450000017885,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 47.86365000001341,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 48.51660000000894,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 49.887825000017884,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 50.49975,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 51.78397500000894,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 52.467,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 53.84085000000894,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 54.485850000008945,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 55.74457500001788,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 56.43757500001787,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 57.78457500001788,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 58.46535000000894,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 59.880150000013415,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 60.486600000008934,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 61.88325,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 62.47545000001789,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 63.94485000000894,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 64.484625,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 65.97525,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 66.50122500000894,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 67.75740000001342,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 68.452125,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 69.869625,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 70.48732500001788,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 71.91585000000894,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 72.42240000001341,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 73.86225,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 74.42025000000001,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 75.77940000001341,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 76.468125,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 77.738625,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 78.43642500000448,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 79.84080000000446,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 80.496375,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 81.90525,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 82.47449999999999,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 83.84617500000448,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 84.47475,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 85.94535000000894,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 86.45932500001788,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 87.85395000001787,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 88.50172500000893,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 89.85885000000894,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 90.45997500000894,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 91.94130000000447,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 92.47410000000895,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 93.81997500000894,
+      "direction": "down",
+      "bpm": 120
+    },
+    {
+      "time": 94.43205000000447,
+      "direction": "down",
+      "bpm": 120
+    },
+
+
+
+
+
+    {
+      "time": 2.4062000000178814,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 4.307200000017882,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 5.605900000005961,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 6.31640000000596,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 7.621100000023842,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 8.31140000000596,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 10.283700000017882,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 12.262400000005961,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 13.578600000023842,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 14.268400000005961,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 15.497800000011921,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 16.27580000001192,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 18.26640000000596,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 20.290700000017882,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 21.50390000000596,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 22.06890000000596,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 23.4595,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 24.08490000000596,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 26.18270000001788,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 28.13680000001192,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 29.48190000000596,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 30.04340000000596,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 31.69930000001192,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 32.24780000001192,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 33.12480000001192,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 34.2455,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 34.76910000002384,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 36.23330000001192,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 36.76160000002384,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 38.090800000011924,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 38.85180000001192,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 40.16890000000596,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 42.33090000000596,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 44.26510000002384,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 45.86990000000596,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 46.22030000001192,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 48.29910000002384,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 49.79120000001788,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 50.17170000001788,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 51.60270000001788,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 52.04130000001192,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 53.6215,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 54.05030000001192,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 54.80570000001788,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 55.83580000001192,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 56.77760000002384,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 58.01010000002384,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 58.62680000001192,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 59.955700000017885,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 60.14140000000596,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 60.627,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 61.25740000000596,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 62.00980000001192,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 64.23540000000597,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 65.92210000002385,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 66.10410000002385,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 66.73120000001788,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 67.85160000002384,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 68.03160000002384,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 68.4455,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 68.73560000002384,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 70.27170000001789,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 72.25660000002384,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 74.20160000002384,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 75.72630000001192,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 76.12180000001192,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 76.67230000001192,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 78.18530000001192,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 78.79310000002384,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 80.26330000001192,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 82.22820000001788,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 84.198,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 85.6585,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 85.8885,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 87.81080000001192,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 88.19420000001789,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 90.22280000001192,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 92.14030000001192,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 93.5625,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 94.15580000001192,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 95.45120000001788,
+      "direction": "left",
+      "bpm": 120
+    }
+  ]
+}
+  </script>
+
+  <script src="../game.js"></script>
+  
+  <div id="results-screen" class="hidden">
+    <div id="results-container">
+      <h2>Música Concluída!</h2>
+      <div id="final-score">Pontuação: 0 (0%)</div>
+      <div id="final-combo">Combo Máximo: 0</div>
+      <div id="final-notes">Acertos 0/0</div>
+      <div class="results-buttons">
+        <button id="play-again-button">Jogar Novamente</button>
+        <button id="change-song-button">Escolher Outra Música</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

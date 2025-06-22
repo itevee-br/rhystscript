@@ -1,0 +1,292 @@
+{
+  "song": "song.mp3",
+  "bpm": 120,
+  "holdThreshold": 0.1,
+  "notes": [
+    {
+      "time": 1.4791499999985098,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 1.7102000000029802,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 1.89210000000149,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 2.0850499999970196,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 2.26710000000149,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 2.46775,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 2.5794500000029803,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 2.80554999999702,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 3.0825499999970196,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 3.2758999999985097,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 3.48914999999851,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 3.6921000000014903,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 3.87814999999851,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 4.08510000000149,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 4.19375,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 4.409,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 4.68989999999851,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 4.9085,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 5.08225,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 5.29235000000149,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 5.47939999999851,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 5.6965499999970195,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 5.80520000000298,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 6.03735000000149,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 6.2889500000029805,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 6.48360000000149,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 6.67889999999851,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 6.87489999999851,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 7.11045000000298,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 7.31085000000149,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 7.424950000002981,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 7.60529999999702,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 7.94410000000149,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 8.10614999999851,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 8.27670000000298,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 8.46075,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 8.69785000000149,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 8.88295000000298,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 8.99189999999851,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 9.19085000000149,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 9.47010000000149,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 9.64929999999702,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 9.864100000001491,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 10.06579999999702,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 10.28479999999702,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 10.49304999999702,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 10.5925,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 10.78064999999851,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 11.06975,
+      "direction": "right",
+      "bpm": 120
+    },
+    {
+      "time": 11.27379999999702,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 11.47364999999851,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 11.67589999999851,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 11.89289999999851,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 12.07314999999851,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 12.18339999999851,
+      "direction": "left",
+      "bpm": 120
+    },
+    {
+      "time": 12.40520000000298,
+      "direction": "up",
+      "bpm": 120
+    },
+    {
+      "time": 12.65129999999702,
+      "direction": "right",
+      "bpm": 120
+    }
+  ]
+}

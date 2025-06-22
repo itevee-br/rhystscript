@@ -1,0 +1,299 @@
+@import url('https://fonts.googleapis.com/css2?family=Reddit+Mono:wght@400..700&family=Inter:wght@400;600&display=swap');
+
+/* Variáveis de cores para o tema claro */
+:root {
+    --bg-color: #f0f0f0;
+    --panel-color: #ffffff;
+    --text-color: #333333;
+    --button-text: white;
+    --platform-tag-color: #666;
+    --github-footer-color: #555;
+    --github-footer-hover: #2196F3;
+    --play-btn: #4CAF50;
+    --conf-btn: #2196F3;
+    --make-btn: #ff9800;
+    --btn-hover-shadow: rgba(0,0,0,0.2);
+}
+
+/* Variáveis de cores para o tema escuro */
+.dark-mode {
+    --bg-color: #121212;
+    --panel-color: #1e1e1e;
+    --text-color: #f0f0f0;
+    --button-text: #eeeeee;
+    --platform-tag-color: #aaa;
+    --github-footer-color: #bbb;
+    --github-footer-hover: #4da6ff;
+    --play-btn: #2E7D32;
+    --conf-btn: #1565C0;
+    --make-btn: #EF6C00;
+    --btn-hover-shadow: rgba(255,255,255,0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Reddit Mono', 'Inter', Arial, sans-serif;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-weight: 400;
+    transition: background-color 0.3s, color 0.3s;
+    position: relative;
+    
+}
+
+
+.titulo {
+    flex: 1;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--panel-color);
+    transition: background-color 0.3s;
+}
+
+.titulo img {
+    max-width: 100%;
+    height: auto;
+    max-height: 86px;
+    width: auto;
+    object-fit: contain;
+}
+
+.platform-tag {
+    font-size: 12px;
+    font-style: italic;
+    color: var(--platform-tag-color);
+    margin-top: 8px;
+    letter-spacing: 0.5px;
+    transition: color 0.3s;
+}
+
+.coisas {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding-left: 10%;
+    background-color: var(--panel-color);
+    overflow: hidden;
+    transition: background-color 0.3s;
+}
+
+.coisas ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 15px 0;
+    width: 100%;
+}
+
+.coisas button {
+    padding: 15px 30px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 200px;
+    max-width: 80%;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    color: var(--button-text);
+    position: relative;
+    overflow: visible;
+}
+
+/* Efeito de brilho ao passar o mouse */
+.coisas button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.coisas button:hover::after {
+    opacity: 0.4;
+}
+
+.coisas button:active::after {
+    opacity: 0.6;
+}
+
+/* Estilos específicos dos botões */
+.play {
+    background-color: var(--play-btn);
+}
+
+.conf {
+    background-color: var(--conf-btn);
+}
+
+.make {
+    background-color: var(--make-btn);
+}
+
+.coisas button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px var(--btn-hover-shadow);
+}
+
+.coisas button.hover-simulated {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px var(--btn-hover-shadow);
+}
+
+/* Botão de alternar tema */
+.theme-toggle {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    color: var(--text-color);
+    transition: color 0.3s;
+    z-index: 10;
+}
+
+/* Link do GitHub */
+.github-footer {
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    font-size: 11px;
+    color: var(--github-footer-color);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.github-footer:hover {
+    color: var(--github-footer-hover);
+    text-decoration: underline;
+}
+
+.audio-bars-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-evenly;
+    z-index: 0;
+    opacity: 0.2;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.audio-bar {
+    width: 2.5%;
+    min-width: 10px;
+    max-width: 30px;
+    background: linear-gradient(to top, var(--play-btn), var(--conf-btn));
+    border-radius: 4px 4px 0 0;
+    transform-origin: bottom;
+    animation: audioBarAnimation 1.5s infinite ease-in-out;
+}
+
+@keyframes audioBarAnimation {
+    0%, 100% { transform: scaleY(0.1); }
+    50% { transform: scaleY(1); }
+}
+
+.dark-mode .audio-bars-container {
+    opacity: 0.15;
+}
+
+.nome {
+    transition: transform 0.2s ease-out;
+    transform-style: preserve-3d;
+    will-change: transform;
+    display: inline-block;
+    z-index: 2;
+}
+
+/* Ajuste para dark mode */
+.dark-mode .audio-bars {
+    opacity: 0.1;
+}
+
+/* Estilo das imagens dos botões Xbox */
+.coisas button img.xbox-icon {
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    bottom: -10px; /* faz a imagem "sair" para fora do botão */
+    right: -10px;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0.95;
+    transform: scale(1.05);
+}
+
+/* Garante que o texto fique centralizado e não seja empurrado */
+.coisas button .btn-text {
+    display: block;
+    text-align: center;
+    width: 100%;
+    z-index: 1;
+    position: relative;
+}
+
+
+/* Media Queries para responsividade */
+@media (max-width: 768px) {
+    .coisas {
+        padding-left: 5%;
+        align-items: center;
+    }
+    
+    .titulo img {
+        max-height: 70px;
+    }
+    
+    .platform-tag {
+        font-size: 10px;
+        margin-top: 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .coisas {
+        padding-left: 2%;
+    }
+    
+    .coisas button {
+        font-size: 16px;
+        padding: 12px 25px;
+    }
+    
+    .github-footer {
+        font-size: 9px;
+        bottom: 5px;
+        right: 10px;
+    }
+    
+    .theme-toggle {
+        font-size: 18px;
+        top: 10px;
+        right: 10px;
+    }
+}

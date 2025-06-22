@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Gerador Automático de Chart</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    #controls { margin-bottom: 20px; }
+    #results { margin-top: 20px; }
+    .note { display: inline-block; margin: 5px; padding: 5px; background: #eee; }
+  </style>
+</head>
+<body>
+  <h1>Gerador Automático de Chart FNF</h1>
+  
+  <div id="controls">
+    <input type="file" id="audioFile" accept="audio/*">
+    <button id="analyze">Analisar Música</button>
+    <button id="generate">Gerar Chart</button>
+  </div>
+  
+  <div id="results">
+    <h3>Notas Detectadas:</h3>
+    <div id="notesList"></div>
+    <h3>JSON do Chart:</h3>
+    <textarea id="chartJson" cols="80" rows="20"></textarea>
+  </div>
+
+  <script>
+    let audioContext;
+    let detectedBeats = [];
+    const directions = ['left', 'down', 'up', 'right'];
+    
+    document.getElementById('analyze').addEventListener('click', async () => {
+      const file = document.getElementById('audioFile').files[0];
+      if (!file) return alert('Selecione um arquivo de áudio');
+      
+      audioContext = new AudioContext();
+      const buffer = await file.arrayBuffer();
+      const audioBuffer = await audioContext.decodeAudioData(buffer);
+      
+      detectedBeats = await analyzeAudio(audioBuffer);
+      displayDetectedNotes(detectedBeats);
+    });
+    
+    document.getElementById('generate').addEventListener('click', () => {
+      if (detectedBeats.length === 0) return alert('Analise o áudio primeiro');
+      generateChartJson();
+    });
+    
+    async function analyzeAudio(audioBuffer) {
+      const beats = [];
+      const offlineContext = new OfflineAudioContext(
+        audioBuffer.numberOfChannels,
+        audioBuffer.length,
+        audioBuffer.sampleRate
+      );
+      
+      const source = offlineContext.createBufferSource();
+      source.buffer = audioBuffer;
+      
+      const analyzer = offlineContext.createScriptProcessor(4096, 1, 1);
+      analyzer.onaudioprocess = e => {
+        const data = e.inputBuffer.getChannelData(0);
+        const rms = calculateRMS(data);
+        
+        if (rms > 0.2) { // Threshold ajustável
+          beats.push(offlineContext.currentTime);
+        }
+      };
+      
+      source.connect(analyzer);
+      analyzer.connect(offlineContext.destination);
+      source.start();
+      
+      return offlineContext.startRendering().then(() => beats);
+    }
+    
+    function calculateRMS(data) {
+      let sum = 0;
+      for (let i = 0; i < data.length; i++) {
+        sum += data[i] * data[i];
+      }
+      return Math.sqrt(sum / data.length);
+    }
+    
+    function displayDetectedNotes(beats) {
+      const notesList = document.getElementById('notesList');
+      notesList.innerHTML = '';
+      
+      beats.forEach((time, i) => {
+        const note = document.createElement('div');
+        note.className = 'note';
+        note.textContent = `${i+1}. ${time.toFixed(2)}s - ${directions[i % 4]}`;
+        notesList.appendChild(note);
+      });
+    }
+    
+    function generateChartJson() {
+      const chart = {
+        song: document.getElementById('audioFile').files[0].name,
+        bpm: 120, // Pode ser calculado automaticamente
+        notes: detectedBeats.map((time, i) => ({
+          time: time,
+          direction: directions[i % directions.length],
+          bpm: 120
+        }))
+      };
+      
+      document.getElementById('chartJson').value = JSON.stringify(chart, null, 2);
+    }
+  </script>
+</body>
+</html>
